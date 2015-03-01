@@ -1,0 +1,141 @@
+// Board	int.0	int.1	int.2	int.3	int.4	int.5
+//Uno, Ethernet	 2	  3
+//Mega2560	 2	  3	  21	  20	  19	  18
+
+#define CHANNEL1 2
+#define CHANNEL2 3
+#define CHANNEL3 21
+#define CHANNEL4 20
+#define CHANNEL5 19
+#define CHANNEL6 18
+
+
+volatile uint16_t Chan[6];
+volatile boolean flag = true;
+
+void setup()
+{
+  Serial.begin(115200);
+  Serial.println("RC Read");
+
+  intInitialize();
+
+}
+
+void loop()
+{
+
+  if(flag==true)
+  {
+    for(int i=0;i<6;i++)
+    {
+      Serial.print(Chan[i]);
+      Serial.print("\t");
+    }
+    Serial.print("");
+    flag=false;
+  }
+
+}
+
+void intInitialize()
+{
+  attachInterrupt(0, channel1,CHANGE);
+  attachInterrupt(1, channel2,CHANGE);
+  attachInterrupt(2, channel3,CHANGE);
+  attachInterrupt(3, channel4,CHANGE);
+  attachInterrupt(4, channel5,CHANGE);
+  attachInterrupt(5, channel6,CHANGE);
+}
+
+void channel1()
+{
+  static uint32_t rise1;
+
+  if(digitalRead(CHANNEL1))
+  {
+    rise1 = micros();
+  }
+  else
+  {
+    Chan[0] = micros() - rise1;
+
+  }
+}
+
+void channel2()
+{
+  static uint32_t rise2;
+
+  if(digitalRead(CHANNEL2))
+  {
+    rise2 = micros();
+  }
+  else
+  {
+    Chan[1] = micros() - rise2;
+
+  }
+}
+
+void channel3()
+{
+  static uint32_t rise3;
+
+  if(digitalRead(CHANNEL3))
+  {
+    rise3 = micros();
+  }
+  else
+  {
+    Chan[2] = micros() - rise3;
+
+  }
+}
+
+void channel4()
+{
+  static uint32_t rise4;
+
+  if(digitalRead(CHANNEL4))
+  {
+    rise4 = micros();
+  }
+  else
+  {
+    Chan[3] = micros() - rise4;
+
+  }
+}
+
+void channel5()
+{
+  static uint32_t rise5;
+
+  if(digitalRead(CHANNEL5))
+  {
+    rise5 = micros();
+  }
+  else
+  {
+    Chan[4] = micros() - rise5;
+
+  }
+}
+
+void channel6()
+{
+  static uint32_t rise6;
+
+  if(digitalRead(CHANNEL6))
+  {
+    rise6 = micros();
+
+  }
+  else
+  {
+    Chan[5] = micros() - rise6;
+    flag=true; 
+  }
+}
+
