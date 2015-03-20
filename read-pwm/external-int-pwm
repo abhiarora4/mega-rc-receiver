@@ -40,19 +40,23 @@ void loop()
 
 void intInitialize()
 {
-  attachInterrupt(0, channel1,CHANGE);
-  attachInterrupt(1, channel2,CHANGE);
-  attachInterrupt(2, channel3,CHANGE);
-  attachInterrupt(3, channel4,CHANGE);
-  attachInterrupt(4, channel5,CHANGE);
-  attachInterrupt(5, channel6,CHANGE);
+  EICRA=0B01010101;
+  EICRB=0B01010101;
+  
+  EIMSK=0XFF;
+  //attachInterrupt(0, channel1,CHANGE);
+  //attachInterrupt(1, channel2,CHANGE);
+  //attachInterrupt(2, channel3,CHANGE);
+  //attachInterrupt(3, channel4,CHANGE);
+ // attachInterrupt(4, channel5,CHANGE);
+  //attachInterrupt(5, channel6,CHANGE);
 }
 
-void channel1()
+ISR(INT0_vect)
 {
   static uint32_t rise1;
 
-  if(digitalRead(CHANNEL1))
+  if(PINE&0B00010000)
   {
     rise1 = micros();
   }
@@ -63,11 +67,11 @@ void channel1()
   }
 }
 
-void channel2()
+ISR(INT1_vect)
 {
   static uint32_t rise2;
 
-  if(digitalRead(CHANNEL2))
+  if(PINE&0B00001000)
   {
     rise2 = micros();
   }
@@ -78,11 +82,11 @@ void channel2()
   }
 }
 
-void channel3()
+ISR(INT2_vect)
 {
   static uint32_t rise3;
 
-  if(digitalRead(CHANNEL3))
+  if(PIND&0B00000001)
   {
     rise3 = micros();
   }
@@ -93,11 +97,11 @@ void channel3()
   }
 }
 
-void channel4()
+ISR(INT3_vect)
 {
   static uint32_t rise4;
 
-  if(digitalRead(CHANNEL4))
+  if(PIND&0B00000010)
   {
     rise4 = micros();
   }
@@ -108,11 +112,11 @@ void channel4()
   }
 }
 
-void channel5()
+ISR(INT4_vect)
 {
   static uint32_t rise5;
 
-  if(digitalRead(CHANNEL5))
+  if(PIND&0B00000100)
   {
     rise5 = micros();
   }
@@ -123,11 +127,11 @@ void channel5()
   }
 }
 
-void channel6()
+ISR(INT5_vect)
 {
   static uint32_t rise6;
 
-  if(digitalRead(CHANNEL6))
+  if(PIND&0B00001000)
   {
     rise6 = micros();
 
